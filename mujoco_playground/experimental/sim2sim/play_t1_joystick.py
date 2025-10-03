@@ -63,7 +63,7 @@ class OnnxController:
         vel_scale_x=vel_scale_x,
         vel_scale_y=vel_scale_y,
         vel_scale_rot=vel_scale_rot,
-        deadzone=0.03,
+        # deadzone=0.03,
     )
 
   def get_obs(self, model, data) -> np.ndarray:
@@ -73,7 +73,8 @@ class OnnxController:
     gravity = imu_xmat.T @ np.array([0, 0, -1])
     joint_angles = data.qpos[7:] - self._default_angles
     joint_velocities = data.qvel[6:]
-    command = self._joystick.get_command()
+    # command = self._joystick.get_command()
+    command = np.array([.2, 0, 0])
     ph = self._phase if np.linalg.norm(command) >= 0.01 else np.ones(2) * np.pi
     phase = np.concatenate([np.cos(ph), np.sin(ph)])
     joint_angles[:2] *= 0.0
@@ -106,7 +107,7 @@ def load_callback(model=None, data=None):
   mujoco.set_mjcb_control(None)
 
   model = mujoco.MjModel.from_xml_path(
-      t1_constants.FEET_ONLY_ROUGH_TERRAIN_XML.as_posix(),
+      t1_constants.FEET_ONLY_FLAT_TERRAIN_XML.as_posix(),
       assets=get_assets(),
   )
   data = mujoco.MjData(model)

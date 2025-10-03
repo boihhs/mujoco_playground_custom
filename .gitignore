@@ -6,3 +6,8 @@ MUJOCO_LOG.TXT
 mujoco_menagerie
 checkpoints/
 logs
+*.deb
+*.pin
+gl_debug.log
+*.deb
+*.log

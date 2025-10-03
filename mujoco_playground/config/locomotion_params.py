@@ -33,13 +33,13 @@ def brax_ppo_config(
       normalize_observations=True,
       action_repeat=1,
       unroll_length=20,
-      num_minibatches=32,
-      num_updates_per_batch=4,
+      num_minibatches=8,
+      num_updates_per_batch=20,
       discounting=0.97,
       learning_rate=3e-4,
       entropy_cost=1e-2,
       num_envs=8192,
-      batch_size=256,
+      batch_size=1024,
       max_grad_norm=1.0,
       network_factory=config_dict.create(
           policy_hidden_layer_sizes=(128, 128, 128, 128),
@@ -122,6 +122,7 @@ def brax_ppo_config(
   elif env_name in (
       "T1JoystickFlatTerrain",
       "T1JoystickRoughTerrain",
+      "ZerothJoystickFlatTerrain"
   ):
     rl_config.num_timesteps = 200_000_000
     rl_config.num_evals = 20
