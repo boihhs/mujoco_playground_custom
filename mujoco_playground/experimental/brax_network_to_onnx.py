@@ -24,7 +24,7 @@ from mujoco_playground import locomotion
 # Config
 # -------------------------
 ENV_NAME = "ZerothJoystickFlatTerrain"
-CKPT_PATH = "/home/leo-benaharon/Desktop/mujoco_playground_custom/logs/ZerothJoystickFlatTerrain-20251006-203205/checkpoints/000063897600"
+CKPT_PATH = "/home/leo-benaharon/Desktop/mujoco_playground_custom/000149094400"
 ONNX_PATH = "/home/leo-benaharon/Desktop/mujoco_playground_custom/mujoco_playground/experimental/sim2sim/onnx/zeroth_policy.onnx"
 DETERMINISTIC = True
 EPS = 1e-8
