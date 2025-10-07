@@ -24,8 +24,8 @@ from mujoco_playground import locomotion
 # Config
 # -------------------------
 ENV_NAME = "ZerothJoystickFlatTerrain"
-CKPT_PATH = "/home/leo-benaharon/Desktop/mujoco_playground_custom/logs/ZerothJoystickFlatTerrain-20251002-211923/checkpoints/000074547200"
-ONNX_PATH = "zeroth_policy.onnx"
+CKPT_PATH = "/home/leo-benaharon/Desktop/mujoco_playground_custom/logs/ZerothJoystickFlatTerrain-20251006-203205/checkpoints/000063897600"
+ONNX_PATH = "/home/leo-benaharon/Desktop/mujoco_playground_custom/mujoco_playground/experimental/sim2sim/onnx/zeroth_policy.onnx"
 DETERMINISTIC = True
 EPS = 1e-8
 CLIP = None  # set to a float (e.g., 5.0) if your training used clipping of normalized obs

@@ -82,7 +82,7 @@ _USE_WANDB = flags.DEFINE_boolean(
     "Use Weights & Biases for logging (ignored in play-only mode)",
 )
 _USE_TB = flags.DEFINE_boolean(
-    "use_tb", False, "Use TensorBoard for logging (ignored in play-only mode)"
+    "use_tb", True, "Use TensorBoard for logging (ignored in play-only mode)"
 )
 _DOMAIN_RANDOMIZATION = flags.DEFINE_boolean(
     "domain_randomization", False, "Use domain randomization"

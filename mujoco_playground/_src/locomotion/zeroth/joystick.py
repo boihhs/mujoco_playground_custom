@@ -57,13 +57,13 @@ def default_config() -> config_dict.ConfigDict:
               lin_vel_z=0.0,
               ang_vel_xy=-0.15,
               orientation=-1.0,
-              base_height=-10.0,
+              base_height=0.0,
               # Energy related rewards.
               torques=-1e-3,
-              action_rate=-0.5,
-              energy=-1e-4,
-              dof_acc=-1e-7,
-              dof_vel=-1e-5,
+              action_rate=-.2,
+              energy=-1e-3,
+              dof_acc=0.0,
+              dof_vel=0.0,
               # Feet related rewards.
               feet_clearance=0.0,
               feet_air_time=2.0,
@@ -75,25 +75,25 @@ def default_config() -> config_dict.ConfigDict:
               alive=0.25,
               termination=0.0,
               # Pose related rewards.
-              joint_deviation_knee=0.0,
-              joint_deviation_hip=0.0,
+              joint_deviation_knee=-0.01,
+              joint_deviation_hip=-0.01,
               dof_pos_limits=-1.0,
-              pose=0.0,
+              pose=-1.0,
               feet_distance=-1.0,
               collision=-1.0,
           ),
           tracking_sigma=0.25,
           max_foot_height=0.06,
-          base_height_target=0.32,
+          base_height_target=0.3,
       ),
       push_config=config_dict.create(
           enable=True,
-          interval_range=[5.0, 10.0],
+          interval_range=[1, 3.0],
           magnitude_range=[0.1, 1.0],
       ),
-      lin_vel_x=[-1.0, 1.0],
-      lin_vel_y=[-0.8, 0.8],
-      ang_vel_yaw=[-1.0, 1.0],
+      lin_vel_x=[-.5, .5],
+      lin_vel_y=[-0.4, 0.4],
+      ang_vel_yaw=[-.5, .5],
       impl="jax",
       nconmax=8 * 8192,
       njmax=80,
@@ -233,13 +233,13 @@ class Joystick(zeroth_base.ZerothEnv):
     # qpos[7:]=*U(0.5, 1.5)
     rng, key = jax.random.split(rng)
     qpos = qpos.at[7:].set(
-        qpos[7:] * jax.random.uniform(key, (16,), minval=0.5, maxval=1.5)
+        qpos[7:] * jax.random.uniform(key, (16,), minval=1.0, maxval=1.0)
     )
 
     # d(xyzrpy)=U(-0.5, 0.5)
     rng, key = jax.random.split(rng)
     qvel = qvel.at[0:6].set(
-        jax.random.uniform(key, (6,), minval=-0.5, maxval=0.5)
+        jax.random.uniform(key, (6,), minval=-0.1, maxval=0.1)
     )
 
     data = mjx_env.make_data(
@@ -375,7 +375,7 @@ class Joystick(zeroth_base.ZerothEnv):
     rewards = {
         k: v * self._config.reward_config.scales[k] for k, v in rewards.items()
     }
-    reward = jp.clip(sum(rewards.values()) * self.dt, 0.0, 10000.0)
+    reward = jp.clip(sum(rewards.values()) * self.dt, -1.0, 10000.0)
 
     state.info["push"] = push
     state.info["step"] += 1
@@ -717,8 +717,8 @@ class Joystick(zeroth_base.ZerothEnv):
       air_time: jax.Array,
       first_contact: jax.Array,
       commands: jax.Array,
-      threshold_min: float = 0.2,
-      threshold_max: float = 0.5,
+      threshold_min: float = 0.1,
+      threshold_max: float = 0.3,
   ) -> jax.Array:
     cmd_norm = jp.linalg.norm(commands)
     air_time = (air_time - threshold_min) * first_contact

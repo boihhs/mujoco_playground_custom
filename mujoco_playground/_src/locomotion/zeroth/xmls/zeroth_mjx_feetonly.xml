@@ -1,6 +1,6 @@
 <mujoco model="opus">
   
-  <option iterations="3" ls_iterations="5" timestep=".002" integrator="implicitfast">
+  <option timestep=".002" integrator="implicitfast">
     <flag eulerdamp="disable"/>
   </option>
 
@@ -56,13 +56,13 @@
       </default>
 
       <!-- Global joint + actuator defaults -->
-      <joint frictionloss="0.1" armature="0.005" actuatorfrcrange="-8. 8."/>
-      <position inheritrange="1"/>
+      <joint damping="0.60" frictionloss="0.052" armature="0.028"/>
+      <position kp="13.8" kv="0.0" forcerange="-3.35 3.35" inheritrange="1"/>
 
       <!-- Shoulder -->
       <default class="shoulder">
-        <joint damping="3"/>
-        <position kp="20"/>
+        <!-- <joint damping=".4"/>
+        <position kp="3"/> -->
         <default class="shoulder_pitch">
           <joint axis="0 0 1" range="-1.74533 1.74533"/>
         </default>
@@ -73,8 +73,8 @@
 
       <!-- Elbow -->
       <default class="elbow">
-        <joint damping="3"/>
-        <position kp="20"/>
+        <!-- <joint damping=".4"/>
+        <position kp="3"/> -->
         <default class="elbow_yaw">
           <joint axis="0 0 1" range="-1.5708 1.5708"/>
         </default>
@@ -82,29 +82,31 @@
 
       <!-- Hip -->
       <default class="hip">
-        <joint damping="5"/>
-        <position kp="25"/>
+        
         <default class="hip_pitch">
+          <!-- <position kp="10"/> -->
           <joint axis="0 0 -1" range="-1.5708 1.5708"/>
         </default>
         <default class="hip_roll">
+          <!-- <position kp="8"/> -->
           <joint axis="0 0 -1" range="-0.785398 0.785398"/>
         </default>
         <default class="hip_yaw">
+          <!-- <position kp="5"/> -->
           <joint axis="0 0 1" range="-0.0872665 1.5708"/>
         </default>
       </default>
 
       <!-- Knee -->
       <default class="knee">
-        <position kp="25"/>
-        <joint axis="0 0 -1" range="-1.5708 1.5708" damping="5"/>
+        <!-- <position kp="8"/> -->
+        <joint axis="0 0 -1" range="-1.5708 1.5708"/>
       </default>
 
       <!-- Ankle -->
       <default class="ankle">
-        <joint damping="5"/>
-        <position kp="25"/>
+        <!-- <joint damping=".4"/> -->
+        <!-- <position kp="3"/> -->
         <default class="ankle_pitch">
           <joint axis="0 0 1" range="-1.5708 1.5708" />
         </default>

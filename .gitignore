@@ -11,3 +11,6 @@ logs
 gl_debug.log
 *.deb
 *.log
+*.deb
+*.pin
+*.log

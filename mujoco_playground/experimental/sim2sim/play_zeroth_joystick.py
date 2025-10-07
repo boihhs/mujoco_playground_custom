@@ -23,6 +23,7 @@ import onnxruntime as rt
 from mujoco_playground._src.locomotion.zeroth import zeroth_constants
 from mujoco_playground._src.locomotion.zeroth.base import get_assets
 from mujoco_playground.experimental.sim2sim.gamepad_reader import Gamepad
+from pynput import keyboard
 
 _HERE = epath.Path(__file__).parent
 _ONNX_DIR = _HERE / "onnx"
@@ -66,6 +67,33 @@ class OnnxController:
         # deadzone=0.03,
     )
 
+    self.pressed_keys = set()
+    def on_press(key):
+        try:    self.pressed_keys.add(key.char)
+        except AttributeError: self.pressed_keys.add(str(key))
+    def on_release(key):
+        try:    self.pressed_keys.discard(key.char)
+        except AttributeError: self.pressed_keys.discard(str(key))
+    keyboard.Listener(on_press=on_press, on_release=on_release).start()
+
+    self.goal_velocity = np.zeros((3,))
+
+  def update_command(self):
+    if 'w' in self.pressed_keys:
+        self.goal_velocity = np.array([0, -.1, 0]) + self.goal_velocity
+    elif 's' in self.pressed_keys:
+        self.goal_velocity = np.array([0, .1, 0]) + self.goal_velocity
+    elif 'a' in self.pressed_keys:
+        self.goal_velocity = np.array([-.1, 0, 0]) + self.goal_velocity
+    elif 'd' in self.pressed_keys:
+        self.goal_velocity = np.array([0.1, 0, 0]) + self.goal_velocity
+    elif 'e' in self.pressed_keys:
+        self.goal_velocity = np.array([0., 0, -.1]) + self.goal_velocity
+    elif 'q' in self.pressed_keys:
+        self.goal_velocity = np.array([0., 0, .1]) + self.goal_velocity
+    else:
+        self.goal_velocity = self.goal_velocity
+
   def get_obs(self, model, data) -> np.ndarray:
     linvel = data.sensor("local_linvel").data
     gyro = data.sensor("gyro").data
@@ -74,8 +102,8 @@ class OnnxController:
     joint_angles = data.qpos[7:] - self._default_angles
     joint_velocities = data.qvel[6:]
     # command = self._joystick.get_command()
-    command = np.array([0, 1, 0])
-    ph = self._phase if np.linalg.norm(command) >= 0.01 else np.ones(2) * np.pi
+    self.update_command()
+    ph = self._phase if np.linalg.norm(self.goal_velocity) >= 0.01 else np.ones(2) * np.pi
     phase = np.concatenate([np.cos(ph), np.sin(ph)])
     joint_angles[:2] *= 0.0
     joint_velocities[:2] *= 0.0
@@ -83,7 +111,7 @@ class OnnxController:
         linvel,
         gyro,
         gravity,
-        command,
+        self.goal_velocity,
         joint_angles,
         joint_velocities,
         self._last_action,

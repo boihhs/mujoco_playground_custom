@@ -54,7 +54,7 @@ def domain_randomize(model: mjx.Model, rng: jax.Array):
 
     # Add mass to torso: +U(-1.0, 1.0).
     rng, key = jax.random.split(rng)
-    dmass = jax.random.uniform(key, minval=-1.0, maxval=1.0)
+    dmass = jax.random.uniform(key, minval=-.1, maxval=.1)
     body_mass = body_mass.at[TORSO_BODY_ID].set(
         body_mass[TORSO_BODY_ID] + dmass
     )
@@ -64,7 +64,7 @@ def domain_randomize(model: mjx.Model, rng: jax.Array):
     qpos0 = model.qpos0
     qpos0 = qpos0.at[7:].set(
         qpos0[7:]
-        + jax.random.uniform(key, shape=(16,), minval=-0.05, maxval=0.05)
+        + jax.random.uniform(key, shape=(16,), minval=-0.01, maxval=0.01)
     )
 
     # Joint stiffness: *U(0.9, 1.1).
