@@ -124,7 +124,7 @@ def brax_ppo_config(
       "T1JoystickRoughTerrain",
       "ZerothJoystickFlatTerrain"
   ):
-    rl_config.num_timesteps = 200_000_000
+    rl_config.num_timesteps = 500_000_000
     rl_config.num_evals = 20
     rl_config.clipping_epsilon = 0.2
     rl_config.num_resets_per_eval = 1
