@@ -42,6 +42,9 @@ from mujoco_playground.config import manipulation_params
 import tensorboardX
 import wandb
 
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 
 xla_flags = os.environ.get("XLA_FLAGS", "")
 xla_flags += " --xla_gpu_triton_gemm_any=True"
